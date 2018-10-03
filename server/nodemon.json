@@ -1,5 +1,6 @@
 {
   "ext": "js",
+  "ignore": ["node_modules/*"],
   "execMap": {
     "js": "babel-node"
   }
