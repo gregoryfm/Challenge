@@ -18,19 +18,14 @@ const SchemaDefinition = `
     authors: [Author]
     author(_id: String): Author
     user(email: String): User
+  }
+
+  type Mutation {
     login(
       email: String!
       password: String!
     ): UserAuth
-  }
 
-  type UserAuth {
-    name: String
-    email: String
-    authToken: String
-  }
-
-  type Mutation {
     createAuthor(
       name: String!
       age: Int
@@ -41,6 +36,11 @@ const SchemaDefinition = `
       email: String!
       password: String!
     ): User
+
+    createBook(
+      title: String!
+      author: AuthorInput
+    ): Book
   }
 `;
 
@@ -58,7 +58,8 @@ const resolvers = {
   },
   Mutation: {
     ...UserType.mutations,
-    ...AuthorType.mutations
+    ...AuthorType.mutations,
+    ...BookType.mutations
   }
 };
 
