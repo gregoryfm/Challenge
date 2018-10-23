@@ -1,20 +1,15 @@
-export const loadAllBooks = (root, args, context) => {
-  const books = [
-    {
-      title: 'Harry Potter and the Chamber of Secrets',
-      author: {
-        name: 'JKR',
-        age: 98,
-      },
-    },
-    {
-      title: 'Jurassic Park',
-      author: {
-        name: 'Michael Crichton',
-        age: 33,
-      },
-    },
-  ];
+import BookModel from './BookModel';
+import mongoose from 'mongoose';
 
-  return books;
-};
+const { ObjectId } = mongoose.Types;
+
+export const createBook = async (root, { title, author }) => {
+  const _id = new ObjectId();
+  let book = new BookModel({ _id, title, author });
+  return await book.save();
+}
+
+export const loadAllBooks = async (root, args) => {
+  const result = await BookModel.find().populate("author");
+  return result;
+}
