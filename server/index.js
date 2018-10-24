@@ -14,7 +14,7 @@ const SchemaDefinition = `
   }
 
   type Query {
-    books: [Book]
+    books(skip: Int, limit: Int): [Book]
     authors: [Author]
     author(_id: String): Author
     user(email: String): User

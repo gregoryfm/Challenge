@@ -9,7 +9,10 @@ export const createBook = async (root, { title, author }) => {
   return await book.save();
 }
 
-export const loadAllBooks = async (root, args) => {
-  const result = await BookModel.find().populate("author");
-  return result;
+export const loadAllBooks = async (root, { skip = 0, limit = 4 }) => {
+  return await BookModel
+    .find()
+    .skip(skip)
+    .limit(limit)
+    .populate("author");
 }
