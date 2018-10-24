@@ -3,40 +3,65 @@ import { withNavigation } from 'react-navigation';
 import styled from 'styled-components/native';
 import AddButton from '../../components/AddButton';
 import { RouteNames } from '../../navigation/RouteNames';
-import { FlatList } from "react-native";
+import { FlatList, ActivityIndicator } from "react-native";
 import gql from "graphql-tag";
 import { ApolloConsumer } from "react-apollo";
 
 class BooksScreen extends Component {
 
   state = {
-    books: [],
+    listBooks: [],
+    fetchedAllBooks: false,
   };
 
-  fetch = (client) => client.query({ query: queryBooks })
-  .then(result => {
-    const { books } = result.data;
-    return this.setState({ books });
-  })
-  .catch(e => {
-    e && console.log(e);
-  });
+  fetch = client => client.query({ query: queryBooks, })
+    .then(result => {
+      const { books } = result.data;
+      return this.setState({ listBooks: books });
+    })
+    .catch(e => {
+      e && console.log(e);
+    });
+
+  fetchMore = client => {
+    const { listBooks, fetchedAllBooks } = this.state;
+    const last = listBooks.length;
+
+    if (fetchedAllBooks) {
+      return;
+    }
+
+    client.query({ query: queryBooks, variables: { skip: last }})
+      .then(result => {
+        const { books } = result.data;
+        if (!books.length) {
+            return this.setState({ fetchedAllBooks: true });
+        }
+        return this.setState({ listBooks: [...listBooks, ...books] });
+      })
+      .catch(e => {
+        e && console.log(e);
+      });
+  }
 
   render() {
     const { navigation } = this.props;
-    const { books } = this.state;
+    const { listBooks } = this.state;
     return (
       <Wrapper>
         <BigText>Book List</BigText>
         <ApolloConsumer>
           { client => {
-            if (!books.length) {
+            if (!listBooks.length) {
               this.fetch(client);
             }
             return (
               <FlatList
-                data={books}
+                data={listBooks}
+                onEndReachedThreshold={0.2}
+                onEndReached={ () => this.fetchMore(client)}
                 keyExtractor={item => item.id}
+                ListFooterComponent={ () => <ActivityIndicator /> }
                 renderItem={ ({item}) =>
                   <BookCard>
                     <BookCardText>
@@ -56,8 +81,8 @@ class BooksScreen extends Component {
 }
 
 const queryBooks = gql`
-  query {
-    books {
+  query($skip: Int, $limit: Int) {
+    books(skip: $skip, limit: $limit) {
       id
       title
       author {
