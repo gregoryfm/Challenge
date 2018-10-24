@@ -3,7 +3,7 @@ import { withNavigation } from 'react-navigation';
 import styled from 'styled-components/native';
 import AddButton from '../../components/AddButton';
 import { RouteNames } from '../../navigation/RouteNames';
-import { FlatList, ActivityIndicator } from "react-native";
+import { FlatList } from "react-native";
 import gql from "graphql-tag";
 import { ApolloConsumer } from "react-apollo";
 
@@ -17,7 +17,11 @@ class BooksScreen extends Component {
   fetch = client => client.query({ query: queryBooks, })
     .then(result => {
       const { books } = result.data;
-      return this.setState({ listBooks: books });
+      if (!books.length) {
+        this.props.navigation.navigate(RouteNames.add_book);
+      } else {
+        return this.setState({ listBooks: books });
+      }
     })
     .catch(e => {
       e && console.log(e);
@@ -58,10 +62,9 @@ class BooksScreen extends Component {
             return (
               <FlatList
                 data={listBooks}
-                onEndReachedThreshold={0.2}
+                onEndReachedThreshold={0.1}
                 onEndReached={ () => this.fetchMore(client)}
                 keyExtractor={item => item.id}
-                ListFooterComponent={ () => <ActivityIndicator /> }
                 renderItem={ ({item}) =>
                   <BookCard>
                     <BookCardText>

@@ -24,7 +24,12 @@ class BooksScreen extends Component {
   fetch = (client) => client.query({ query: queryAuthors })
     .then(result => {
       const { authors } = result.data;
-      return this.setState({ listAuthors: authors });
+      if (!authors.length) {
+        this.props.navigation.navigate(RouteNames.add_author);
+      } else {
+        return this.setState({ listAuthors: authors });
+      }
+
     })
     .catch(e => {
       e && console.log(e);
