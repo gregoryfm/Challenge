@@ -13,10 +13,10 @@ export const typeDefs = `
 `;
 
 export const resolvers = {
-  authors: () => AuthorLoader.loadAllAuthors(),
-  author: (root, args, context) => AuthorLoader.loadAuthor(root, args, context),
+  authors: (root, args) => AuthorLoader.loadAllAuthors(root, args),
+  author: (root, args) => AuthorLoader.loadAuthor(root, args),
 };
 
 export const mutations = {
-  createAuthor: (root, args, context) => AuthorLoader.createAuthor(root, args, context),
+  createAuthor: (root, args) => AuthorLoader.createAuthor(root, args),
 }

@@ -16,7 +16,9 @@ export const createAuthor = async (root, { name, age }) => {
   return await author.save();
 }
 
-export const loadAllAuthors = async (root, args) => {
-  const result = await AuthorModel.find();
-  return result;
+export const loadAllAuthors = async (root, { skip = 0, limit = 4 }) => {
+  return await AuthorModel
+    .find()
+    .skip(skip)
+    .limit(limit);
 }
