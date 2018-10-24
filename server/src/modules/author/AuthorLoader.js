@@ -12,7 +12,7 @@ export const loadAuthor = async (root, { name }) => {
 
 export const createAuthor = async (root, { name, age }) => {
   const _id = new ObjectId();
-  let author = new AuthorModel({ _id, name, age });
+  let author = new AuthorModel({ _id, name: name.trim(), age });
   return await author.save();
 }
 

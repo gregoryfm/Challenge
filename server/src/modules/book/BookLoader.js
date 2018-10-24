@@ -5,7 +5,7 @@ const { ObjectId } = mongoose.Types;
 
 export const createBook = async (root, { title, author }) => {
   const _id = new ObjectId();
-  let book = new BookModel({ _id, title, author });
+  let book = new BookModel({ _id, title: title.trim(), author });
   return await book.save();
 }
 
