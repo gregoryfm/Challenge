@@ -22,6 +22,7 @@
 - `$ cd ..` To go back to the root folder
 - `$ cd frontend`
 - `$ yarn` to install dependencies fron the react native.
+- Edit the `src/ApolloClient.js` file and put your local IP in LOCAL_IP const.
 - `$ react-native run-ios` If you have the iphone connected to the mac you can pass the parameter `--device "DEVICE-NAME"` to install and run the app on iphone
 
 ### Made with
