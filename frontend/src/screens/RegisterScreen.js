@@ -96,13 +96,13 @@ const BigText = styled.Text`
   padding: 20px 0 20px 0;
   margin-left: 10;
   margin-top: 10;
-  color: palevioletred;
+  color: ${props => props.theme.colors.bigTextColor};
 `;
 
 const ButtonText = styled.Text`
   font-size: 20px;
   font-weight: 600;
-  color: white;
+  color: ${props => props.theme.colors.buttonTextColor};
 `;
 
 const TextWrapper = styled.View`
@@ -122,7 +122,7 @@ const KeyboardWrapper = styled.KeyboardAvoidingView.attrs({
   behavior: Platform.OS === 'ios' ? 'padding' : '',
 })`
   flex: 1;
-  background-color: palevioletred;
+  background-color: ${props => props.theme.colors.mainBackgroundColor};
 `;
 
 export default withNavigation(RegisterScreen);

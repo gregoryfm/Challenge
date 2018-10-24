@@ -1,11 +1,12 @@
 import React from 'react';
-import { ScrollView, Platform, AsyncStorage } from 'react-native';
+import { ScrollView, Platform } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import styled from 'styled-components/native';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import gql from "graphql-tag";
 import { Mutation } from 'react-apollo';
+import { RouteNames } from '../navigation/RouteNames';
 
 class AddAuthorScreen extends React.Component {
 
@@ -16,12 +17,14 @@ class AddAuthorScreen extends React.Component {
 
   handleSave = ( createAuthor ) => {
     const { name, age } = this.state;
+    const { navigation } = this.props;
     if (!name || !age) {
       alert('Fill out all the fields!');
     } else {
       createAuthor({ variables: { name, age: Number(age) }})
       .then(() => {
         alert("Author added successfully");
+        navigation.navigate(RouteNames.add_book);
       })
       .catch(error => alert(error));
     }
@@ -79,13 +82,13 @@ const BigText = styled.Text`
   padding: 20px 0 20px 0;
   margin-left: 10;
   margin-top: 10;
-  color: white;
+  color: ${props => props.theme.colors.bigTextColor};
 `;
 
 const ButtonText = styled.Text`
   font-size: 20px;
   font-weight: 600;
-  color: white
+  color: ${props => props.theme.colors.buttonTextColor};
 `;
 
 const TextWrapper = styled.View`
@@ -105,7 +108,7 @@ const KeyboardWrapper = styled.KeyboardAvoidingView.attrs({
   behavior: Platform.OS === 'ios' ? 'padding' : 'height',
 })`
   flex: 1;
-  background-color: palevioletred;
+  background-color: ${props => props.theme.colors.mainBackgroundColor};
 `;
 
 export default withNavigation(AddAuthorScreen);

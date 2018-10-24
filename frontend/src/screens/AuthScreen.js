@@ -28,7 +28,7 @@ class AuthScreen extends Component {
 
 const View = styled.View`
   flex: 1;
-  background-color: palevioletred;
+  background-color: ${props => props.theme.colors.mainBackgroundColor};
   padding: 20px;
 `;
 
@@ -55,11 +55,11 @@ const ButtonsWrapper = styled.View`
 const ButtonText = styled.Text`
   font-size: 20px;
   font-weight: bold;
-  color: white;
+  color: ${props => props.theme.colors.buttonTextColor};
 `;
 
 const CustomButton = styled(Button)`
-  border: 2px solid white;
+  border: 2px solid ${props => props.theme.colors.buttonBorderColor};;
 `;
 
 export default withNavigation(AuthScreen);

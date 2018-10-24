@@ -99,16 +99,16 @@ const BigText = styled.Text`
   padding: 20px 0 20px 0;
   margin-left: 10;
   margin-top: 10;
-  color: white;
+  color: ${props => props.theme.colors.bigTextColor};
 `;
 
 const Wrapper = styled.View`
   flex: 1;
-  background-color: palevioletred;
+  background-color: ${props => props.theme.colors.mainBackgroundColor};
 `;
 
 const BookCard = styled.View`
-  background-color: #add8e6;
+  background-color: ${props => props.theme.colors.cardBackgroundColor};
   flex-grow: 1;
   flex-basis: 0;
   margin: 10px 7px 10px 7px;
@@ -118,7 +118,7 @@ const BookCard = styled.View`
 `;
 
 const BookCardText = styled.Text`
-  color: black;
+  color: ${props => props.theme.colors.textColor};
   font-size: 25px;
 `;
 

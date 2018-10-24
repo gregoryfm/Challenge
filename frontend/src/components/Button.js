@@ -20,6 +20,4 @@ const Wrapper = styled.TouchableOpacity`
   border: 2px solid white;
 `;
 
-// border: 2px solid white;
-
 export default Button;
