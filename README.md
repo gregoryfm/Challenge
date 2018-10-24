@@ -1,5 +1,10 @@
 # Foton Challenge
 
+<p align="center" margin="35">
+  <img 
+       width="320"
+       src="https://raw.githubusercontent.com/gregoryfm/Challenge/master/prints/IMG_4085.PNG" />
+</p>
 
 ### Instructions to run the app
 > You'll need a mac with node, yarn, brew, mongodb and Xcode installed with Simulator or a iPhone.
