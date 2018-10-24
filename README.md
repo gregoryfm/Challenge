@@ -26,10 +26,12 @@
 - `$ react-native run-ios` If you have the iphone connected to the mac you can pass the parameter `--device "DEVICE-NAME"` to install and run the app on iphone
 
 ### Made with
+- Node
 - React Native
 - React Navigation
 - Styled Components
-- Apollo GraphQL
+- Apollo
+- GraphQL
 - MongoDB
 - Mongoose
 - JWT
