@@ -16,6 +16,7 @@ class RegisterScreen extends React.Component {
   };
 
   handleRegister = ( createUser ) => {
+    const { navigation } = this.props;
     const { name, email, password } = this.state;
 
     if (!name || !email || !password) {
