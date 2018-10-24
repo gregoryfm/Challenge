@@ -4,6 +4,7 @@ import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { ApolloLink } from 'apollo-link';
 
+const LOCAL_IP = '192.168.25.9';
 
 const client = new ApolloClient({
   link: ApolloLink.from([
@@ -15,7 +16,7 @@ const client = new ApolloClient({
       if (networkError) console.log(`[Network error]: ${networkError}`);
     }),
     new HttpLink({
-      uri: 'http://192.168.25.9:4000/graphql',
+      uri: `http://${LOCAL_IP}:4000/graphql`,
       credentials: 'same-origin'
     })
   ]),
