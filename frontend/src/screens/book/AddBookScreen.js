@@ -12,7 +12,8 @@ class BooksScreen extends Component {
   state = {
     modalVisible: false,
     author: undefined,
-    authors: [],
+    listAuthors: [],
+    fetchedAllAuthors: false,
     title: '',
   };
 
@@ -21,13 +22,34 @@ class BooksScreen extends Component {
   }
 
   fetch = (client) => client.query({ query: queryAuthors })
-  .then(result => {
-    const { authors } = result.data;
-    return this.setState({ authors });
-  })
-  .catch(e => {
-    e && console.log(e);
-  });
+    .then(result => {
+      const { authors } = result.data;
+      return this.setState({ listAuthors: authors });
+    })
+    .catch(e => {
+      e && console.log(e);
+    });
+
+  fetchMore = client => {
+    const { listAuthors, fetchedAllAuthors } = this.state;
+    const last = listAuthors.length;
+
+    if (fetchedAllAuthors) {
+      return;
+    }
+
+    client.query({ query: queryAuthors, variables: { skip: last }})
+      .then(result => {
+        const { authors } = result.data;
+        if (!authors.length) {
+            return this.setState({ fetchedAllAuthors: true });
+        }
+        return this.setState({ listAuthors: [...listAuthors, ...authors] });
+      })
+      .catch(e => {
+        e && console.log(e);
+      });
+  }
 
   onPressAction = item => {
     this.setState({ author: item, modalVisible: false });
@@ -55,7 +77,7 @@ class BooksScreen extends Component {
 
   render() {
     const { navigation } = this.props;
-    const { author, authors, modalVisible } = this.state;
+    const { author, listAuthors, modalVisible } = this.state;
     return (
       <Mutation mutation={ADD_BOOK}>
         { createBook => {
@@ -68,25 +90,24 @@ class BooksScreen extends Component {
                 placeholder="Book Title"
                 onChangeText={text => this.setState({ title: text })} />
               {
-                !author && (
-                  <Input
+                !author
+                &&
+                ( <Input
                     placeholder="Author"
-                    onFocus={() => this.setModalVisible(true)} />
-                )
+                    onFocus={() => this.setModalVisible(true)} /> )
                 ||
-                (
-                  <Input
+                ( <Input
                     onFocus={() => this.setModalVisible(true)}
-                    value={`${author.name}, ${author.age} years old`} />
-                )
+                    value={`${author.name}, ${author.age} years old`} /> )
               }
               <ModalAuthor
                 navigation={this.props.navigation}
                 modalVisible={modalVisible}
-                authors={authors}
+                authors={listAuthors}
                 onPressAction={this.onPressAction}
                 onPressAddAuthor={this.onPressAddAuthor}
-                fetch={this.fetch} />
+                fetch={this.fetch}
+                fetchMore={this.fetchMore} />
 
               <ButtonsWrapper>
                 <Button onPress={() => this.handleSave(createBook)}>
@@ -105,8 +126,8 @@ class BooksScreen extends Component {
 }
 
 const queryAuthors = gql`
-  query {
-    authors {
+  query($skip: Int, $limit: Int) {
+    authors(skip: $skip, limit: $limit) {
       id
       name
       age
@@ -132,12 +153,12 @@ const BigText = styled.Text`
   padding: 20px 0 20px 0;
   margin-left: 10;
   margin-top: 10;
-  color: white;
+  color: ${props => props.theme.colors.bigTextColor};
 `;
 
 const Wrapper = styled.View`
   flex: 1;
-  background-color: palevioletred;
+  background-color: ${props => props.theme.colors.mainBackgroundColor};
 `;
 
 const ButtonsWrapper = styled.View`
@@ -149,7 +170,7 @@ const ButtonsWrapper = styled.View`
 `;
 
 const ButtonText = styled.Text`
-  color: white;
+  color: ${props => props.theme.colors.buttonTextColor};
   font-size: 20px;
   font-weight: 600;
 `;
