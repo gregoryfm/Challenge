@@ -34,6 +34,7 @@
 - GraphQL
 - MongoDB
 - Mongoose
+- Flow
 - JWT
 
 ### License
