@@ -6,6 +6,21 @@ import { ApolloLink } from 'apollo-link';
 
 const LOCAL_IP = '192.168.25.9';
 
+
+const defaultOptions = {
+  watchQuery: {
+    fetchPolicy: "network-only",
+    errorPolicy: "ignore"
+  },
+  query: {
+    fetchPolicy: "network-only",
+    errorPolicy: "all"
+  },
+  mutate: {
+    errorPolicy: "all"
+  }
+};
+
 const client = new ApolloClient({
   link: ApolloLink.from([
     onError(({ graphQLErrors, networkError }) => {
@@ -20,7 +35,8 @@ const client = new ApolloClient({
       credentials: 'same-origin'
     })
   ]),
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
+  defaultOptions
 });
 
 export default client;
