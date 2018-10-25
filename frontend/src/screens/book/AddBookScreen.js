@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react';
 import { withNavigation } from 'react-navigation';
 import styled from 'styled-components/native';
@@ -8,10 +10,23 @@ import gql from "graphql-tag";
 import ModalAuthor from '../../components/ModalAuthor';
 import { RouteNames } from '../../navigation/RouteNames';
 
-class BooksScreen extends Component {
+type Props = {
+  navigation: Object,
+};
+
+type State = {
+  modalVisible: boolean,
+  author: Object,
+  listAuthors: Array<mixed>,
+  fetchedAllAuthors: boolean,
+  title: string,
+  refreshing: boolean,
+};
+
+class BooksScreen extends Component<Props, State> {
   state = {
     modalVisible: false,
-    author: undefined,
+    author: { id: '', name: '', age: 0 },
     listAuthors: [],
     fetchedAllAuthors: false,
     title: '',
@@ -66,7 +81,7 @@ class BooksScreen extends Component {
     ).then(result => {
         const { authors } = result.data;
         if (!authors.length) {
-            return this.setState({ fetchedAllBooks: true });
+            return this.setState({ fetchedAllAuthors: true });
         }
         return this.setState({ listAuthors: [...listAuthors, ...authors], refreshing: false });
     }).catch(e => {
