@@ -15,13 +15,15 @@ class BooksScreen extends Component {
     listAuthors: [],
     fetchedAllAuthors: false,
     title: '',
+    refreshing: false
   };
 
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
   }
 
-  fetch = (client) => client.query({ query: queryAuthors })
+  fetch = client =>
+    client.query({ query: queryAuthors, fetchPolicy: "network-only" })
     .then(result => {
       const { authors } = result.data;
       if (!authors.length) {
@@ -29,7 +31,6 @@ class BooksScreen extends Component {
       } else {
         return this.setState({ listAuthors: authors });
       }
-
     })
     .catch(e => {
       e && console.log(e);
@@ -39,11 +40,9 @@ class BooksScreen extends Component {
     const { listAuthors, fetchedAllAuthors } = this.state;
     const last = listAuthors.length;
 
-    if (fetchedAllAuthors) {
-      return;
-    }
+    if (fetchedAllAuthors) return;
 
-    client.query({ query: queryAuthors, variables: { skip: last }})
+    client.query({ query: queryAuthors, variables: { skip: last }, fetchPolicy: "network-only"})
       .then(result => {
         const { authors } = result.data;
         if (!authors.length) {
@@ -56,6 +55,25 @@ class BooksScreen extends Component {
       });
   }
 
+  onRefresh = client => {
+    const { listAuthors } = this.state;
+    client.query(
+      {
+        query: queryAuthors,
+        variables: { skip: listAuthors.length },
+        fetchPolicy: "network-only"
+      }
+    ).then(result => {
+        const { authors } = result.data;
+        if (!authors.length) {
+            return this.setState({ fetchedAllBooks: true });
+        }
+        return this.setState({ listAuthors: [...listAuthors, ...authors], refreshing: false });
+    }).catch(e => {
+      e && console.log(e);
+    })
+  };
+
   onPressAction = item => {
     this.setState({ author: item, modalVisible: false });
   }
@@ -65,15 +83,16 @@ class BooksScreen extends Component {
     this.props.navigation.navigate('AddAuthorScreen');
   }
 
-  handleSave = ( createBook ) => {
+  handleSave = createBook => {
     const { title, author } = this.state;
     const { navigation } = this.props;
     if (!title && !author) {
       alert('Fill out all the fields!');
     } else {
       createBook({ variables: { title, authorId: author.id }})
-      .then(() => {
-        alert("Book added successfully.");
+      .then((result) => {
+        const book = result.data.createBook;
+        alert(`Book ${book.title}, added successfully.`);
         navigation.navigate(RouteNames.books);
       })
       .catch(error => alert(error));
@@ -82,7 +101,7 @@ class BooksScreen extends Component {
 
   render() {
     const { navigation } = this.props;
-    const { author, listAuthors, modalVisible } = this.state;
+    const { author, listAuthors, modalVisible, refreshing } = this.state;
     return (
       <Mutation mutation={ADD_BOOK}>
         { createBook => {
@@ -112,7 +131,9 @@ class BooksScreen extends Component {
                 onPressAction={this.onPressAction}
                 onPressAddAuthor={this.onPressAddAuthor}
                 fetch={this.fetch}
-                fetchMore={this.fetchMore} />
+                fetchMore={this.fetchMore}
+                onRefresh={this.onRefresh}
+                refreshing={refreshing} />
 
               <ButtonsWrapper>
                 <Button onPress={() => this.handleSave(createBook)}>
@@ -143,6 +164,7 @@ const queryAuthors = gql`
 const ADD_BOOK = gql`
   mutation($title: String!, $authorId: String!) {
     createBook( title: $title, author: { _id: $authorId }) {
+      id
       title
       author {
         name

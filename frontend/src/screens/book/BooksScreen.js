@@ -8,13 +8,14 @@ import gql from "graphql-tag";
 import { ApolloConsumer } from "react-apollo";
 
 class BooksScreen extends Component {
-
   state = {
     listBooks: [],
     fetchedAllBooks: false,
+    client: undefined,
+    refreshing: false,
   };
 
-  fetch = client => client.query({ query: queryBooks, })
+  fetch = client => client.query({ query: queryBooks, variables: {}, fetchPolicy: "network-only" })
     .then(result => {
       const { books } = result.data;
       if (!books.length) {
@@ -31,11 +32,9 @@ class BooksScreen extends Component {
     const { listBooks, fetchedAllBooks } = this.state;
     const last = listBooks.length;
 
-    if (fetchedAllBooks) {
-      return;
-    }
+    if (fetchedAllBooks) return;
 
-    client.query({ query: queryBooks, variables: { skip: last }})
+    client.query({ query: queryBooks, variables: { skip: last }, fetchPolicy: "network-only" })
       .then(result => {
         const { books } = result.data;
         if (!books.length) {
@@ -46,14 +45,35 @@ class BooksScreen extends Component {
       .catch(e => {
         e && console.log(e);
       });
-  }
+  };
+
+  onRefresh = client => {
+    const { listBooks } = this.state;
+
+    client.query(
+      {
+        query: queryBooks,
+        variables: { skip: listBooks.length },
+        fetchPolicy: "network-only"
+      }
+    ).then(result => {
+        const { books } = result.data;
+        if (!books.length) {
+            return this.setState({ fetchedAllBooks: true });
+        }
+        return this.setState({ listBooks: [...listBooks, ...books], refreshing: false });
+    }).catch(e => {
+      e && console.log(e);
+    })
+  };
 
   render() {
     const { navigation } = this.props;
-    const { listBooks } = this.state;
+    const { listBooks, refreshing } = this.state;
     return (
       <Wrapper>
         <BigText>Book List</BigText>
+
         <ApolloConsumer>
           { client => {
             if (!listBooks.length) {
@@ -62,8 +82,10 @@ class BooksScreen extends Component {
             return (
               <FlatList
                 data={listBooks}
+                refreshing={refreshing}
+                onRefresh={() => this.onRefresh(client)}
                 onEndReachedThreshold={0.1}
-                onEndReached={ () => this.fetchMore(client)}
+                onEndReached={() => this.fetchMore(client)}
                 keyExtractor={item => item.id}
                 renderItem={ ({item}) =>
                   <BookCard>

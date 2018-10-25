@@ -11,8 +11,8 @@ import {
 
 class ModalAuthor extends React.Component {
   render() {
-    const { modalVisible, authors, onPressAction,
-      onPressAddAuthor, fetch, fetchMore } = this.props;
+    const { modalVisible, authors, onPressAction, onPressAddAuthor,
+      fetch, fetchMore, refreshing, onRefresh  } = this.props;
     return (
       <Modal
         animationType="slide"
@@ -29,6 +29,8 @@ class ModalAuthor extends React.Component {
                   <BigText>Authors</BigText>
                   <FlatList
                     data={authors}
+                    refreshing={refreshing}
+                    onRefresh={() => onRefresh(client)}
                     onEndReachedThreshold={0.2}
                     onEndReached={ () => fetchMore(client)}
                     keyExtractor={item => item.id}
