@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react';
 import { withNavigation } from 'react-navigation';
 import styled from 'styled-components/native';
@@ -7,11 +9,25 @@ import { FlatList } from "react-native";
 import gql from "graphql-tag";
 import { ApolloConsumer } from "react-apollo";
 
-class BooksScreen extends Component {
+type Props = {
+  navigation: Object,
+};
+
+type State = {
+  listBooks: Array<mixed>,
+  fetchedAllBooks: boolean,
+  refreshing: boolean,
+}
+
+type book = {
+  id: string,
+  title: string,
+}
+
+class BooksScreen extends Component<Props, State> {
   state = {
     listBooks: [],
     fetchedAllBooks: false,
-    client: undefined,
     refreshing: false,
   };
 
@@ -86,12 +102,12 @@ class BooksScreen extends Component {
                 onRefresh={() => this.onRefresh(client)}
                 onEndReachedThreshold={0.1}
                 onEndReached={() => this.fetchMore(client)}
-                keyExtractor={item => item.id}
-                renderItem={ ({item}) =>
+                keyExtractor={book => book.id}
+                renderItem={ ({ book }) =>
                   <BookCard>
                     <BookCardText>
-                      {item.title} {"\n"}
-                      {item.author.name}, {item.author.age} years old
+                      {book.title} {"\n"}
+                      {book.author.name}, {book.author.age} years old
                     </BookCardText>
                   </BookCard>
                 }

@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react';
 import { withNavigation } from 'react-navigation';
 import styled from 'styled-components/native';
@@ -5,7 +7,13 @@ import Button from '../components/Button';
 import { RouteNames } from '../navigation/RouteNames';
 import { IMAGES } from '../utils/assets/images';
 
-class AuthScreen extends Component {
+type Props = {
+  navigation: Object,
+};
+
+type State = {};
+
+class AuthScreen extends Component<Props, State> {
   render() {
     const { navigation } = this.props;
     return (

@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { ScrollView, Platform } from 'react-native';
 import { withNavigation } from 'react-navigation';
@@ -7,8 +9,17 @@ import Input from '../components/Input';
 import gql from "graphql-tag";
 import { Mutation } from 'react-apollo';
 
-class RegisterScreen extends React.Component {
+type Props = {
+  navigation: Object,
+};
 
+type State = {
+  name: string,
+  email: string,
+  password: string,
+};
+
+class RegisterScreen extends React.Component<Props, State> {
   state = {
     name: '',
     email: '',

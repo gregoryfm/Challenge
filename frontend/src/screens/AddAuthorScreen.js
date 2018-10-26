@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { ScrollView, Platform } from 'react-native';
 import { withNavigation } from 'react-navigation';
@@ -8,11 +10,20 @@ import gql from "graphql-tag";
 import { Mutation } from 'react-apollo';
 import { RouteNames } from '../navigation/RouteNames';
 
-class AddAuthorScreen extends React.Component {
+type Props = {
+  navigation: Object,
+};
+
+type State = {
+ name: string,
+ age: number,
+};
+
+class AddAuthorScreen extends React.Component<Props, State> {
 
   state = {
     name: '',
-    age: null,
+    age: 0,
   };
 
   handleSave = ( createAuthor ) => {

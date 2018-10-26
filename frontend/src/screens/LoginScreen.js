@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { ScrollView, Platform, AsyncStorage } from 'react-native';
 import { withNavigation } from 'react-navigation';
@@ -8,7 +10,16 @@ import { RouteNames } from '../navigation/RouteNames';
 import gql from "graphql-tag";
 import { Mutation } from 'react-apollo';
 
-class LoginScreen extends React.Component {
+type Props = {
+  navigation: Object,
+};
+
+type State = {
+  email: string,
+  password: string,
+};
+
+class LoginScreen extends React.Component<Props, State> {
 
   state = {
     email: '',
