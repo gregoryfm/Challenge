@@ -33,6 +33,9 @@ class ModalAuthor extends React.Component {
                     onRefresh={() => onRefresh(client)}
                     onEndReachedThreshold={0.2}
                     onEndReached={ () => fetchMore(client)}
+                    ListEmptyComponent={() =>
+                      <TextEmptyList>No authors registered</TextEmptyList>
+                    }
                     keyExtractor={item => item.id}
                     renderItem={ ({item}) =>
                       <TouchableOpacity onPress={() => onPressAction(item)}>
@@ -56,6 +59,16 @@ class ModalAuthor extends React.Component {
 const View = styled.View`
   background-color: ${props => props.theme.colors.mainBackgroundColor};
   height: 100%;
+`;
+
+const TextEmptyList = styled.Text`
+  font-size: 30px;
+  justify-content: center;
+  align-content: center;
+  font-weight: bold;
+  padding: 20px 0 20px 0;
+  margin-left: 10;
+  color: #CCCCCC;
 `;
 
 const BigText = styled.Text`

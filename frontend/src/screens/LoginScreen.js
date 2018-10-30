@@ -34,15 +34,15 @@ class LoginScreen extends React.Component<Props, State> {
       alert('Fill out all the fields!');
     } else {
       login({ variables: { email, password }})
-      .then(({ data: { login: { name, email, authToken }}}) => {
-        if (authToken) {
-          AsyncStorage.setItem('token', authToken);
+      .then(({ data }) => {
+        if (data.login) {
+          AsyncStorage.setItem('token', data.login.authToken);
           navigation.navigate(RouteNames.logged);
         } else {
-          alert(`não encontrado..`);
+          alert(`Unregistered User`);
         }
       })
-      .catch(error => alert(error));
+      .catch(error => console.log(error));
     }
   }
 

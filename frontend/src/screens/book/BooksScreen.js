@@ -1,5 +1,3 @@
-// @flow
-
 import React, { Component } from 'react';
 import { withNavigation } from 'react-navigation';
 import styled from 'styled-components/native';
@@ -19,11 +17,6 @@ type State = {
   refreshing: boolean,
 }
 
-type book = {
-  id: string,
-  title: string,
-}
-
 class BooksScreen extends Component<Props, State> {
   state = {
     listBooks: [],
@@ -34,11 +27,8 @@ class BooksScreen extends Component<Props, State> {
   fetch = client => client.query({ query: queryBooks, variables: {}, fetchPolicy: "network-only" })
     .then(result => {
       const { books } = result.data;
-      if (!books.length) {
-        this.props.navigation.navigate(RouteNames.add_book);
-      } else {
+      if (books.length)
         return this.setState({ listBooks: books });
-      }
     })
     .catch(e => {
       e && console.log(e);
@@ -102,12 +92,15 @@ class BooksScreen extends Component<Props, State> {
                 onRefresh={() => this.onRefresh(client)}
                 onEndReachedThreshold={0.1}
                 onEndReached={() => this.fetchMore(client)}
-                keyExtractor={book => book.id}
-                renderItem={ ({ book }) =>
+                ListEmptyComponent={() =>
+                  <TextEmptyList>No books registered</TextEmptyList>
+                }
+                keyExtractor={item => item.id}
+                renderItem={ ({ item }) =>
                   <BookCard>
                     <BookCardText>
-                      {book.title} {"\n"}
-                      {book.author.name}, {book.author.age} years old
+                      {item.title} {"\n"}
+                      {item.author.name}, {item.author.age} years old
                     </BookCardText>
                   </BookCard>
                 }
@@ -161,6 +154,16 @@ const BookCard = styled.View`
 const BookCardText = styled.Text`
   color: ${props => props.theme.colors.textColor};
   font-size: 25px;
+`;
+
+const TextEmptyList = styled.Text`
+  font-size: 30px;
+  justify-content: center;
+  align-content: center;
+  font-weight: bold;
+  padding: 20px 0 20px 0;
+  margin-left: 10;
+  color: #CCCCCC;
 `;
 
 export default withNavigation(BooksScreen);

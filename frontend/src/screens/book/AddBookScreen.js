@@ -41,11 +41,7 @@ class BooksScreen extends Component<Props, State> {
     client.query({ query: queryAuthors, fetchPolicy: "network-only" })
     .then(result => {
       const { authors } = result.data;
-      if (!authors.length) {
-        this.props.navigation.navigate(RouteNames.add_author);
-      } else {
-        return this.setState({ listAuthors: authors });
-      }
+      if (authors.length) return this.setState({ listAuthors: authors });
     })
     .catch(e => {
       e && console.log(e);
@@ -128,19 +124,12 @@ class BooksScreen extends Component<Props, State> {
                 autoCapitalize="words"
                 placeholder="Book Title"
                 onChangeText={text => this.setState({ title: text })} />
-              {
-                !author
-                &&
-                ( <Input
-                    placeholder="Author"
-                    onFocus={() => this.setModalVisible(true)} /> )
-                ||
-                ( <Input
-                    onFocus={() => this.setModalVisible(true)}
-                    value={`${author.name}, ${author.age} years old`} /> )
-              }
+              <AddAuthor onPress={() => this.setModalVisible(true)}>
+                <AddAuthorText>{ !author.id
+                    && 'Choose a Author'
+                    || `${author.name}, ${author.age} years old`}</AddAuthorText>
+              </AddAuthor>
               <ModalAuthor
-                navigation={this.props.navigation}
                 modalVisible={modalVisible}
                 authors={listAuthors}
                 onPressAction={this.onPressAction}
@@ -215,6 +204,29 @@ const ButtonText = styled.Text`
   color: ${props => props.theme.colors.buttonTextColor};
   font-size: 20px;
   font-weight: 600;
+`;
+
+const AddAuthorText = styled.Text`
+  color: antiquewhite;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 13px;
+`;
+
+const AddAuthor = styled.TouchableOpacity`
+  padding: 5px;
+  border: 2px solid white;
+  border-radius: 20px;
+  height: 60;
+  width: 97%;
+  font-size: 20;
+  color: white;
+  font-weight: bold;
+  padding-left: 10px;
+  margin-top: 24px;
+  margin-bottom: -10px;
+  margin-left: 5px;
+  margin-right: 5px;
 `;
 
 export default withNavigation(BooksScreen);
