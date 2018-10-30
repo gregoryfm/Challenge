@@ -21,7 +21,7 @@ const TextInput = styled.TextInput.attrs({
   height: 60;
   width: 100%;
   font-size: 20;
-  color: white;
+  color: antiquewhite;
   font-weight: bold;
   margin-bottom: -10px;
   padding-left: 10px;
