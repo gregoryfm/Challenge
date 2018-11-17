@@ -8,6 +8,7 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 import gql from "graphql-tag";
 import { Mutation } from 'react-apollo';
+import { IMAGES } from '../utils/assets/images';
 
 type Props = {
   navigation: Object,
@@ -45,7 +46,6 @@ class RegisterScreen extends React.Component<Props, State> {
   }
 
   render() {
-    const { navigation } = this.props;
     return (
       <Mutation mutation={REGISTER_USER}>
 
@@ -54,7 +54,10 @@ class RegisterScreen extends React.Component<Props, State> {
               <KeyboardWrapper>
                 <ScrollView>
                   <TextWrapper>
-                    <BigText>Create an Account</BigText>
+                    <HeaderButton onPress={() => this.props.navigation.goBack()}>
+                      <ReturnIcon />
+                      <BigText>Create an Account</BigText>
+                    </HeaderButton>
                     <Input
                       autoCorrect
                       placeholder="Name"
@@ -75,9 +78,6 @@ class RegisterScreen extends React.Component<Props, State> {
                 <ButtonsWrapper>
                   <Button onPress={() => this.handleRegister(createUser)}>
                     <ButtonText>Register</ButtonText>
-                  </Button>
-                  <Button onPress={() => navigation.goBack()}>
-                    <ButtonText>Return</ButtonText>
                   </Button>
                 </ButtonsWrapper>
               </KeyboardWrapper>
@@ -103,11 +103,11 @@ const REGISTER_USER = gql`
 `;
 
 const BigText = styled.Text`
+  width: 350px;
   font-size: 36px;
   font-weight: bold;
-  padding: 20px 0 20px 0;
   margin-left: 10;
-  margin-top: 10;
+  margin-top: -7px;
   color: ${props => props.theme.colors.bigTextColor};
 `;
 
@@ -135,6 +135,20 @@ const KeyboardWrapper = styled.KeyboardAvoidingView.attrs({
 })`
   flex: 1;
   background-color: ${props => props.theme.colors.mainBackgroundColor};
+`;
+
+const HeaderButton = styled.TouchableOpacity`
+  padding: 35px 0 20px 0;
+  margin-left: 10;
+  flexDirection: row;
+`;
+
+const ReturnIcon = styled.Image.attrs({
+  source: IMAGES.ARROW,
+})`
+  width: 35;
+  height: 26;
+  tint-color: white;
 `;
 
 export default withNavigation(RegisterScreen);

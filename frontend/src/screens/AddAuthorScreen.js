@@ -9,6 +9,7 @@ import Input from '../components/Input';
 import gql from "graphql-tag";
 import { Mutation } from 'react-apollo';
 import { RouteNames } from '../navigation/RouteNames';
+import { IMAGES } from '../utils/assets/images';
 
 type Props = {
   navigation: Object,
@@ -50,7 +51,10 @@ class AddAuthorScreen extends React.Component<Props, State> {
               <KeyboardWrapper>
                 <ScrollView>
                   <TextWrapper>
-                    <BigText>New Author</BigText>
+                    <HeaderButton onPress={() => this.props.navigation.goBack()}>
+                      <ReturnIcon />
+                      <BigText>New Author</BigText>
+                    </HeaderButton>
                     <Input
                       placeholder="Name"
                       autoCorrect
@@ -65,9 +69,6 @@ class AddAuthorScreen extends React.Component<Props, State> {
                 <ButtonsWrapper>
                   <Button onPress={() => this.handleSave(createAuthor)}>
                     <ButtonText>Save</ButtonText>
-                  </Button>
-                  <Button onPress={() => navigation.goBack()}>
-                    <ButtonText>Return</ButtonText>
                   </Button>
                 </ButtonsWrapper>
               </KeyboardWrapper>
@@ -88,11 +89,11 @@ const ADD_AUTHOR = gql`
 `;
 
 const BigText = styled.Text`
+  width: 300px;
   font-size: 36px;
   font-weight: bold;
-  padding: 20px 0 20px 0;
   margin-left: 10;
-  margin-top: 10;
+  margin-top: -7px;
   color: ${props => props.theme.colors.bigTextColor};
 `;
 
@@ -120,6 +121,20 @@ const KeyboardWrapper = styled.KeyboardAvoidingView.attrs({
 })`
   flex: 1;
   background-color: ${props => props.theme.colors.mainBackgroundColor};
+`;
+
+const HeaderButton = styled.TouchableOpacity`
+  padding: 35px 0 20px 0;
+  margin-left: 10;
+  flexDirection: row;
+`;
+
+const ReturnIcon = styled.Image.attrs({
+  source: IMAGES.ARROW,
+})`
+  width: 35;
+  height: 26;
+  tint-color: white;
 `;
 
 export default withNavigation(AddAuthorScreen);

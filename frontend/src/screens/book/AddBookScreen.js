@@ -9,6 +9,7 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import ModalAuthor from '../../components/ModalAuthor';
 import { RouteNames } from '../../navigation/RouteNames';
+import { IMAGES } from '../../utils/assets/images';
 
 type Props = {
   navigation: Object,
@@ -34,7 +35,7 @@ class BooksScreen extends Component<Props, State> {
   };
 
   setModalVisible(visible) {
-    this.setState({modalVisible: visible});
+    this.setState({ modalVisible: visible });
   }
 
   fetch = client =>
@@ -118,7 +119,10 @@ class BooksScreen extends Component<Props, State> {
         { createBook => {
           return (
             <Wrapper>
-              <BigText>New Book</BigText>
+              <HeaderButton onPress={() => this.props.navigation.goBack()}>
+                <ReturnIcon />
+                <BigText>New Book</BigText>
+              </HeaderButton>
               <Input
                 autoCorrect
                 autoCapitalize="words"
@@ -142,9 +146,6 @@ class BooksScreen extends Component<Props, State> {
               <ButtonsWrapper>
                 <Button onPress={() => this.handleSave(createBook)}>
                   <ButtonText>Save</ButtonText>
-                </Button>
-                <Button onPress={() => navigation.goBack()}>
-                  <ButtonText>Return</ButtonText>
                 </Button>
               </ButtonsWrapper>
             </Wrapper>
@@ -179,11 +180,11 @@ const ADD_BOOK = gql`
 `;
 
 const BigText = styled.Text`
+  width: 150px;
   font-size: 36px;
   font-weight: bold;
-  padding: 20px 0 20px 0;
   margin-left: 10;
-  margin-top: 10;
+  margin-top: -7px;
   color: ${props => props.theme.colors.bigTextColor};
 `;
 
@@ -227,6 +228,20 @@ const AddAuthor = styled.TouchableOpacity`
   margin-bottom: -10px;
   margin-left: 5px;
   margin-right: 5px;
+`;
+
+const HeaderButton = styled.TouchableOpacity`
+  padding: 35px 0 20px 0;
+  margin-left: 10;
+  flexDirection: row;
+`;
+
+const ReturnIcon = styled.Image.attrs({
+  source: IMAGES.ARROW,
+})`
+  width: 35;
+  height: 26;
+  tint-color: white;
 `;
 
 export default withNavigation(BooksScreen);
