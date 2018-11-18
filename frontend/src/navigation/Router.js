@@ -6,12 +6,14 @@ import RegisterScreen from '../screens/RegisterScreen';
 import BooksScreen from '../screens/book/BooksScreen';
 import AddBookScreen from '../screens/book/AddBookScreen';
 import AddAuthorScreen from '../screens/AddAuthorScreen';
+import DetailsBookScreen from '../screens/book/DetailsBookScreen';
 
 const LoggedAppRouter = createStackNavigator(
   {
     [RouteNames.books]: { screen: BooksScreen },
     [RouteNames.add_book]: { screen: AddBookScreen },
     [RouteNames.add_author]: { screen: AddAuthorScreen },
+    [RouteNames.details_book]: { screen: DetailsBookScreen },
   },
   {
     initialRouteName: RouteNames.books,

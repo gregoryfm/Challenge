@@ -119,7 +119,7 @@ class BooksScreen extends Component<Props, State> {
         { createBook => {
           return (
             <Wrapper>
-              <HeaderButton onPress={() => this.props.navigation.goBack()}>
+              <HeaderButton onPress={() => navigation.goBack()}>
                 <ReturnIcon />
                 <BigText>New Book</BigText>
               </HeaderButton>

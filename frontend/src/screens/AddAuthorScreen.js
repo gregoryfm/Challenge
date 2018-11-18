@@ -43,7 +43,6 @@ class AddAuthorScreen extends React.Component<Props, State> {
   }
 
   render() {
-    const { navigation } = this.props;
     return (
       <Mutation mutation={ADD_AUTHOR}>
           { createAuthor => {

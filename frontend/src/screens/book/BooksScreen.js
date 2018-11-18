@@ -3,7 +3,7 @@ import { withNavigation } from 'react-navigation';
 import styled from 'styled-components/native';
 import AddButton from '../../components/AddButton';
 import { RouteNames } from '../../navigation/RouteNames';
-import { FlatList } from "react-native";
+import { FlatList, TouchableWithoutFeedback } from "react-native";
 import gql from "graphql-tag";
 import { ApolloConsumer } from "react-apollo";
 
@@ -73,6 +73,10 @@ class BooksScreen extends Component<Props, State> {
     })
   };
 
+  onPressItem = book => {
+    this.props.navigation.navigate('DetailsBookScreen', { book });
+  }
+
   render() {
     const { navigation } = this.props;
     const { listBooks, refreshing } = this.state;
@@ -97,12 +101,14 @@ class BooksScreen extends Component<Props, State> {
                 }
                 keyExtractor={item => item.id}
                 renderItem={ ({ item }) =>
-                  <BookCard>
-                    <BookCardText>
-                      {item.title} {"\n"}
-                      {item.author.name}, {item.author.age} years old
-                    </BookCardText>
-                  </BookCard>
+                  <TouchableWithoutFeedback onPress={() => this.onPressItem(item)}>
+                    <BookCard>
+                      <BookCardText>
+                        {item.title} {"\n"}
+                        {item.author.name}
+                      </BookCardText>
+                    </BookCard>
+                  </TouchableWithoutFeedback>
                 }
               />
             )
