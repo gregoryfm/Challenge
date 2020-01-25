@@ -10,9 +10,9 @@
 </p>
 
 ### Instructions to run the app
-> You'll need a mac with node, yarn or npm, brew, mongodb and Xcode installed with Simulator or a iPhone.
+> You'll need a mac with node, yarn or npm, brew, mongodb and Xcode installed with Simulator or an iPhone.
 
--> Open the terminal and run the follow commands:
+-> Open terminal and run the follow commands:
 - `$ git clone https://github.com/gregoryfm/Challenge.git`
 - `$ sudo mongod`
 -  open another terminal tab.
@@ -21,9 +21,9 @@
 -  open another terminal tab.
 - `$ cd ..` To go back to the root folder
 - `$ cd frontend`
-- `$ yarn` to install dependencies fron the react native.
-- Edit the `src/ApolloClient.js` file and put your local IP in _LOCAL_IP_ const.
-- `$ react-native run-ios` If you have the iphone connected to mac, you can pass the parameter `--device "DEVICE-NAME"` to install and run the app on iphone
+- `$ yarn` to install dependencies from the react native.
+- Edit _LOCAL_IP_ with your local IP at `src/ApolloClient.js`.
+- `$ react-native run-ios` If you have an iphone connected to your mac, add `--device "DEVICE-NAME"` to install and run it on your device.
 
 ### Made with
 - Node
@@ -36,6 +36,3 @@
 - Mongoose
 - Flow
 - JWT
-
-### License
-MIT © [Gregory](https://github.com/gregoryfm)
